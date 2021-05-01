@@ -34,7 +34,7 @@ public class BallMovement : MonoBehaviour
           isGoingUp = false;
         }
 
-        if (rb.velocity.x > 10) {
+        if (rb.velocity.x > 3) {
             rb.AddForce(-forwardForce * Time.deltaTime, 0, 0);
         }
         
