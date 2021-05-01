@@ -20,11 +20,11 @@ public class BoxRed : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-        // print("collided");
-        // if(GlobalClass.isGoingDown) {
-        //   GlobalClass.isGoingDown = false;
-        //   player.AddForce(0, 20100 * Time.deltaTime, 0);
-        // }
+        print("collided");
+        if(GlobalClass.isGoingDown) {
+          GlobalClass.isGoingDown = false;
+          player.AddForce(0, 20100 * Time.deltaTime, 0);
+        }
 
 
     }

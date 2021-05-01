@@ -1,17 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
-using System.Collections.Generic;
-using UnityEngine.iOS;
+using UnityEngine.SceneManagement;
 public class BallMovement : MonoBehaviour
 {
     // Start is called before the first frame update
     public Rigidbody rb;
 
-    public Transform player;
-    public bool started = true;
+    public bool started = false;
+
+    private bool isDown = false;
 
     private bool isGoingUp = false;
-
     public float forwardForce = 1000f; 
 
     public float upwardForce = 20100f; 
@@ -36,12 +35,13 @@ public class BallMovement : MonoBehaviour
           isGoingUp = false;
         }
 
-        if (rb.velocity.x > GlobalClass.speedCount) {
+        if (rb.velocity.x > 10) {
             rb.AddForce(-forwardForce * Time.deltaTime, 0, 0);
         }
-
-        if (player.position.y > 10) {
-            rb.AddForce(0, -upwardForce/20 * Time.deltaTime, 0);
+        
+        if (rb.position.y < -1f)
+        {
+            FindObjectOfType<GameManager>().EndGame();
         }
         
     }
@@ -54,24 +54,14 @@ public class BallMovement : MonoBehaviour
 
 
         if(Input.GetKeyDown("s")) {
-            // rb.Sleep();
-            rb.AddForce( 0, -downwardForce * Time.deltaTime, 0);
+            rb.Sleep();
+            rb.AddForce( forwardForce * Time.deltaTime, -downwardForce * Time.deltaTime, 0);
         }
-
-         if (Input.touchCount > 2)
-            {
-                started = true;
-                rb.AddForce( 0, -downwardForce * Time.deltaTime, 0);
-            }
 
     }
 
     void OnCollisionEnter(Collision collision)
     {
-
-        
-        Debug.Log("Collided" + rb.position.y);
-
 
         if(!isGoingUp) {
             rb.AddForce(0, upwardForce * Time.deltaTime, 0);
@@ -81,5 +71,9 @@ public class BallMovement : MonoBehaviour
         GlobalClass.isGoingDown = false;
    
     }
+
+    // void OnCollisionEnter(Collision collisionInfo) {
+
+    // }
 
 }

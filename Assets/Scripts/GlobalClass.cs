@@ -9,5 +9,4 @@ public class GlobalClass : MonoBehaviour {
        public static float ScreenFadeAlpha = 1.0f;
        public static bool isGoingDown = false;
 
-       public static float speedCount = 5;
 }
