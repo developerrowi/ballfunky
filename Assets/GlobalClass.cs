@@ -8,4 +8,6 @@ public class GlobalClass : MonoBehaviour {
        const int ScreenFadingOut   =   1;
        public static float ScreenFadeAlpha = 1.0f;
        public static bool isGoingDown = false;
+
+       public static float speedCount = 5;
 }
