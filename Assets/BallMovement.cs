@@ -1,14 +1,22 @@
 ﻿using UnityEngine;
 using System.Collections;
-
 public class BallMovement : MonoBehaviour
 {
     // Start is called before the first frame update
     public Rigidbody rb;
 
-    public float forwardForce = 500000f; 
+    public bool started = false;
+
+    private bool isDown = false;
+
+    private bool isGoingUp = false;
+    public float forwardForce = 1000f; 
+
+    public float upwardForce = 20100f; 
     
-    public float downwardForce = 25000f;
+    public float customGravity = 1000f;
+    public float downwardForce = 30000f;
+
     void Start()
     {
     }
@@ -17,29 +25,46 @@ public class BallMovement : MonoBehaviour
     void FixedUpdate()
     {
     //    rb.AddForce(0,0, forwardForce * Time.deltaTime);
+        rb.AddForce(0, -customGravity * Time.deltaTime, 0);
+        if(started) {
+            rb.AddForce(forwardForce * Time.deltaTime, 0, 0);
+        }
+
+        if(rb.velocity.y < 0) {
+          isGoingUp = false;
+        }
+
+        if (rb.velocity.x > 10) {
+            rb.AddForce(-forwardForce * Time.deltaTime, 0, 0);
+        }
+        
     }
 
     void Update() {
         if(Input.GetKey("d")) {
-            rb.AddForce(500 * Time.deltaTime,0, 0);
+            started = true;
         }
+        
 
-        if(Input.GetKey("a")) {
-            rb.AddForce(-500 * Time.deltaTime,0, 0);
-        }
-
-        // if(Input.GetKeyDown("space")) {
-        //     rb.AddForce(0, 30000 * Time.deltaTime, 0);
-        // }
-
-        // if(Input.GetKey("w")) {
-        //     rb.AddForce(0,0, forwardForce * Time.deltaTime);
-        // }
 
         if(Input.GetKeyDown("s")) {
-            rb.AddForce(0, -downwardForce * Time.deltaTime, 0);
+            rb.Sleep();
+            rb.AddForce( forwardForce * Time.deltaTime, -downwardForce * Time.deltaTime, 0);
         }
 
-        
     }
+
+    void OnCollisionEnter(Collision collision)
+    {
+
+        if(!isGoingUp) {
+            rb.AddForce(0, upwardForce * Time.deltaTime, 0);
+        }
+        isGoingUp = true;
+        
+        print(rb.velocity.x);
+        GlobalClass.isGoingDown = false;
+   
+    }
+
 }
