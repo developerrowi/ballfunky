@@ -6,17 +6,16 @@ public class BallMovement : MonoBehaviour
     // Start is called before the first frame update
     public Rigidbody rb;
 
+    public Transform player;
     public bool started = false;
 
-    private bool isDown = false;
-
     private bool isGoingUp = false;
-    public float forwardForce = 1000f; 
+    public float forwardForce = 500f; 
 
     public float upwardForce = 20100f; 
     
     public float customGravity = 1000f;
-    public float downwardForce = 30000f;
+    public float downwardForce = 10000f;
 
     void Start()
     {
@@ -39,6 +38,11 @@ public class BallMovement : MonoBehaviour
             rb.AddForce(-forwardForce * Time.deltaTime, 0, 0);
         }
         
+
+        if (player.position.y > 10) {
+            rb.AddForce(0, -upwardForce/20 * Time.deltaTime, 0);
+        }
+
         if (rb.position.y < -1f)
         {
             FindObjectOfType<GameManager>().EndGame();
@@ -58,12 +62,36 @@ public class BallMovement : MonoBehaviour
             rb.AddForce( forwardForce * Time.deltaTime, -downwardForce * Time.deltaTime, 0);
         }
 
+        if(Input.touchCount > 0)
+         {
+             Touch touch = Input.GetTouch(0);
+            switch (touch.phase)
+            {
+                // Record initial touch position.
+                case TouchPhase.Began:
+                    started = true;
+                    rb.AddForce( 0, -downwardForce * Time.deltaTime, 0);
+                    break;
+
+
+                // case TouchPhase.Moved:
+                //     direction = touch.position - startPos;
+                //     break;
+
+
+                // case TouchPhase.Ended:
+                //     directionChosen = true;
+                //     break;
+            }
+
+         }
+
     }
 
     void OnCollisionEnter(Collision collision)
     {
 
-        if(!isGoingUp) {
+        if(!isGoingUp || player.position.y > 3.5) {
             rb.AddForce(0, upwardForce * Time.deltaTime, 0);
         }
         isGoingUp = true;
@@ -71,9 +99,5 @@ public class BallMovement : MonoBehaviour
         GlobalClass.isGoingDown = false;
    
     }
-
-    // void OnCollisionEnter(Collision collisionInfo) {
-
-    // }
 
 }
